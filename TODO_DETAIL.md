@@ -18,14 +18,61 @@
 
 ---
 
+## ✅ STATUS IMPLEMENTASI TERKINI
+
+Update terakhir: fondasi MVP awal sudah selesai dibuat dan sudah dipush ke GitHub.
+
+### Sudah selesai
+- [x] Struktur project Python dibuat.
+- [x] `.gitignore`, `.env.example`, `requirements.txt`, `setup.cfg`, dan `README.md` dibuat.
+- [x] Dependency diinstall dan disesuaikan untuk Python 3.13.
+- [x] Config environment dibuat di `config/settings.py`.
+- [x] Constants daerah dan pesan bot dibuat di `config/constants.py`.
+- [x] Logger dengan rotating file handler dibuat.
+- [x] Entry point bot dibuat di `main.py`.
+- [x] Handler bot dibuat untuk `/start`, `/help`, `/daerah`, `/cek`, dan `/stop`.
+- [x] Inline keyboard pilihan daerah dibuat.
+- [x] Database SQLite dibuat dengan tabel `users`.
+- [x] CRUD dasar user/subscription dibuat.
+- [x] Scraper Siskaperbapo awal dibuat.
+- [x] Parser tabel HTML dibuat.
+- [x] Formatter pesan Telegram dibuat.
+- [x] Message splitting untuk pesan panjang dibuat.
+- [x] Unit test dasar dibuat untuk URL builder, parser, dan formatter.
+- [x] `python -m compileall .` berhasil.
+- [x] `python -m pytest tests` berhasil: 5 test passed.
+- [x] `python -m black --check .` berhasil.
+- [x] `python -m flake8 .` berhasil.
+- [x] Diagnostics project bersih tanpa error/warning.
+- [x] Commit lokal dibuat.
+- [x] Remote GitHub dipasang: `https://github.com/rab781/BakoBot.git`.
+- [x] Project berhasil dipush ke branch `main`.
+
+### Belum selesai / berikutnya
+- [ ] Buat file `.env` lokal dan isi `TELEGRAM_BOT_TOKEN` asli.
+- [ ] Test manual bot langsung di Telegram.
+- [ ] Validasi scraping nyata untuk beberapa daerah di Siskaperbapo.
+- [ ] Implementasi scheduler broadcast harian dengan APScheduler.
+- [ ] Tambahkan rate limiting per user.
+- [ ] Tambahkan backup database otomatis.
+- [ ] Tambahkan notifikasi error ke admin.
+- [ ] Siapkan deployment 24/7.
+
+---
+
 # FASE 0: Setup Project & Architecture
 **Estimasi Waktu:** 2-3 jam  
 **Tujuan:** Setup struktur project yang proper dan scalable
 
 ## 0.1. Inisialisasi Git Repository
-- [ ] Jalankan `git init` di folder project
-- [ ] Create repository di GitHub/GitLab
-- [ ] Connect local dengan remote: `git remote add origin <URL>`
+- [x] Jalankan `git init` di folder project
+- [x] Create repository di GitHub/GitLab
+- [x] Connect local dengan remote: `git remote add origin <URL>`
+
+Catatan selesai:
+- Remote GitHub: `https://github.com/rab781/BakoBot.git`
+- Branch aktif: `main`
+- Project sudah dipush ke GitHub.
 
 ## 0.2. Buat Struktur Folder
 Buat folder structure berikut:
@@ -34,29 +81,29 @@ Buat folder structure berikut:
 mkdir -p src/bot src/scraper src/database src/utils config tests logs backups data
 ```
 
-- [ ] Buat folder `src/` - Source code utama
-- [ ] Buat folder `src/bot/` - Telegram bot handlers
-- [ ] Buat folder `src/scraper/` - Web scraping logic
-- [ ] Buat folder `src/database/` - Database operations
-- [ ] Buat folder `src/utils/` - Helper functions
-- [ ] Buat folder `config/` - Configuration files
-- [ ] Buat folder `tests/` - Unit & integration tests
-- [ ] Buat folder `logs/` - Log files (add to .gitignore)
-- [ ] Buat folder `backups/` - Database backups (add to .gitignore)
-- [ ] Buat folder `data/` - SQLite database (add to .gitignore)
+- [x] Buat folder `src/` - Source code utama
+- [x] Buat folder `src/bot/` - Telegram bot handlers
+- [x] Buat folder `src/scraper/` - Web scraping logic
+- [x] Buat folder `src/database/` - Database operations
+- [x] Buat folder `src/utils/` - Helper functions
+- [x] Buat folder `config/` - Configuration files
+- [x] Buat folder `tests/` - Unit & integration tests
+- [x] Buat folder `logs/` - Log files (add to .gitignore)
+- [x] Buat folder `backups/` - Database backups (add to .gitignore)
+- [x] Buat folder `data/` - SQLite database (add to .gitignore)
 
 ## 0.3. Buat File __init__.py
 Buat file `__init__.py` di setiap folder Python:
 
-- [ ] `src/__init__.py`
-- [ ] `src/bot/__init__.py`
-- [ ] `src/scraper/__init__.py`
-- [ ] `src/database/__init__.py`
-- [ ] `src/utils/__init__.py`
-- [ ] `config/__init__.py`
+- [x] `src/__init__.py`
+- [x] `src/bot/__init__.py`
+- [x] `src/scraper/__init__.py`
+- [x] `src/database/__init__.py`
+- [x] `src/utils/__init__.py`
+- [x] `config/__init__.py`
 
 ## 0.4. Setup .gitignore
-- [ ] Buat file `.gitignore`
+- [x] Buat file `.gitignore`
 
 **Isi file `.gitignore`:**
 ```gitignore
@@ -105,7 +152,7 @@ htmlcov/
 
 ## 0.5. Setup Environment Variables
 - [ ] Buat file `.env` (untuk development local)
-- [ ] Buat file `.env.example` (template tanpa sensitive data, di-commit ke git)
+- [x] Buat file `.env.example` (template tanpa sensitive data, di-commit ke git)
 
 **File `.env.example`:**
 ```env
@@ -140,7 +187,7 @@ USER_COMMAND_RATE_PERIOD=60
 - [ ] Isi `ADMIN_CHAT_ID` dengan chat ID Telegram kamu
 
 ## 0.6. Setup Requirements
-- [ ] Buat file `requirements.txt`
+- [x] Buat file `requirements.txt`
 
 **Isi file `requirements.txt`:**
 ```txt
@@ -181,7 +228,7 @@ flake8==6.1.0
 mypy==1.7.1
 ```
 
-- [ ] Install dependencies: `pip install -r requirements.txt`
+- [x] Install dependencies: `pip install -r requirements.txt`
 
 ## 0.7. Setup Virtual Environment
 - [ ] Buat virtual environment: `python -m venv venv`
@@ -191,13 +238,15 @@ mypy==1.7.1
 - [ ] Install requirements: `pip install -r requirements.txt`
 
 **✅ CHECKLIST FASE 0:**
-- [ ] Git repository initialized
-- [ ] Folder structure created
-- [ ] .gitignore configured
-- [ ] .env and .env.example created
-- [ ] requirements.txt created
-- [ ] Virtual environment setup dan dependencies installed
-- [ ] Commit semua ke git: `git add . && git commit -m "Initial project setup"`
+- [x] Git repository initialized
+- [x] Folder structure created
+- [x] .gitignore configured
+- [ ] .env dibuat dan diisi token asli
+- [x] .env.example created
+- [x] requirements.txt created
+- [x] Dependencies installed
+- [x] Commit semua ke git
+- [x] Push ke GitHub
 
 ---
 
@@ -223,8 +272,8 @@ mypy==1.7.1
 ## 1.2. Buat Configuration Module
 **File: `config/settings.py`**
 
-- [ ] Buat file `config/settings.py`
-- [ ] Implement configuration loader
+- [x] Buat file `config/settings.py`
+- [x] Implement configuration loader
 
 **Code untuk `config/settings.py`:**
 ```python
@@ -276,8 +325,8 @@ USER_COMMAND_RATE_PERIOD = int(os.getenv('USER_COMMAND_RATE_PERIOD', '60'))
 ## 1.3. Buat Constants Module
 **File: `config/constants.py`**
 
-- [ ] Buat file `config/constants.py`
-- [ ] Define semua constants (daerah, messages, emojis)
+- [x] Buat file `config/constants.py`
+- [x] Define semua constants (daerah, messages, emojis)
 
 **Code untuk `config/constants.py`:**
 ```python
@@ -431,8 +480,8 @@ KOMODITAS_EMOJI_MAP = {
 ## 1.4. Setup Logging System
 **File: `src/utils/logger.py`**
 
-- [ ] Buat file `src/utils/logger.py`
-- [ ] Implement proper logging dengan rotation
+- [x] Buat file `src/utils/logger.py`
+- [x] Implement proper logging dengan rotation
 
 **Code untuk `src/utils/logger.py`:**
 ```python
@@ -501,8 +550,10 @@ logger.info("Logging test OK")
 ## 1.5. Buat Bot Sederhana (Ping Pong)
 **File: `main.py`**
 
-- [ ] Buat file `main.py` di root folder
-- [ ] Implement basic bot yang respond `/start`
+- [x] Buat file `main.py` di root folder
+- [x] Implement basic bot yang respond `/start`
+- [x] Register command `/help`, `/daerah`, `/cek`, dan `/stop`
+- [x] Register callback handler untuk pilihan daerah
 
 **Code untuk `main.py` (versi basic):**
 ```python
@@ -561,13 +612,13 @@ if __name__ == '__main__':
 **✅ CHECKLIST FASE 1:**
 - [ ] BotFather setup selesai
 - [ ] Token tersimpan di .env
-- [ ] config/settings.py created & tested
-- [ ] config/constants.py created
-- [ ] src/utils/logger.py created & tested
-- [ ] main.py created
-- [ ] Bot bisa respond ke /start dan /help
-- [ ] Logging berfungsi dengan baik
-- [ ] Commit: `git add . && git commit -m "Fase 1: Basic bot setup complete"`
+- [x] config/settings.py created & tested
+- [x] config/constants.py created
+- [x] src/utils/logger.py created & tested
+- [x] main.py created
+- [ ] Bot bisa respond ke /start dan /help setelah `.env` diisi token asli
+- [x] Logging berfungsi dengan baik
+- [x] Commit dan push sudah dilakukan
 
 ---
 
@@ -887,15 +938,16 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Jika data kosong, jangan anggap bot rusak — beri pesan bahwa data belum tersedia
 
 **✅ CHECKLIST FASE 2:**
-- [ ] URL builder selesai
-- [ ] HTTP client dengan timeout dan retry selesai
-- [ ] Parser HTML selesai
-- [ ] Cleaning dataframe selesai
-- [ ] Main scraper selesai
-- [ ] Formatter pesan selesai
-- [ ] Scraper berhasil dites untuk beberapa daerah
-- [ ] Error handling dasar scraping sudah ada
-- [ ] Commit: `git add . && git commit -m "Fase 2: Scraper complete"`
+- [x] URL builder selesai
+- [x] HTTP client dengan timeout dan retry selesai
+- [x] Parser HTML selesai
+- [x] Cleaning dataframe selesai
+- [x] Main scraper selesai
+- [x] Formatter pesan selesai
+- [ ] Scraper berhasil dites manual untuk beberapa daerah real
+- [x] Error handling dasar scraping sudah ada
+- [x] Unit test parser/formatter/URL builder tersedia
+- [x] Commit dan push sudah dilakukan
 
 ---
 
@@ -915,55 +967,55 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - `created_at`
 - `updated_at`
 
-- [ ] Buat file `src/database/connection.py`
-- [ ] Buat file `src/database/models.py`
-- [ ] Buat file `src/database/operations.py`
+- [ ] Buat file `src/database/connection.py` terpisah jika database makin kompleks
+- [ ] Buat file `src/database/models.py` terpisah jika database makin kompleks
+- [x] Buat file `src/database/operations.py`
 
 ## 3.2. Implement Database Connection
-- [ ] Buat helper koneksi SQLite
-- [ ] Pastikan folder `data/` dibuat otomatis jika belum ada
-- [ ] Aktifkan mode WAL jika menggunakan SQLite
-- [ ] Tambahkan fungsi init database saat aplikasi start
+- [x] Buat helper koneksi SQLite
+- [x] Pastikan folder `data/` dibuat otomatis jika belum ada
+- [x] Aktifkan mode WAL jika menggunakan SQLite
+- [x] Tambahkan fungsi init database saat aplikasi start
 
 ## 3.3. Buat Tabel User Subscription
-- [ ] Buat tabel `users`
-- [ ] Tambahkan unique constraint untuk `chat_id`
-- [ ] Tambahkan index jika diperlukan
+- [x] Buat tabel `users`
+- [x] Tambahkan unique constraint untuk `chat_id`
+- [x] Tambahkan index jika diperlukan
 
 **Operasi yang harus tersedia:**
-- [ ] `create_user(...)`
-- [ ] `get_user_by_chat_id(chat_id)`
-- [ ] `update_user_region(chat_id, kode_daerah)`
-- [ ] `set_subscription_status(chat_id, status)`
-- [ ] `get_all_subscribed_users()`
+- [x] `upsert_user_region(...)`
+- [x] `get_user_by_chat_id(chat_id)`
+- [x] `upsert_user_region(chat_id, kode_daerah)` untuk create/update daerah
+- [x] `set_subscription_status(chat_id, status)`
+- [x] `get_all_subscribed_users()`
 
 ## 3.4. Buat Inline Keyboard untuk Pilihan Daerah
 **File: `src/bot/keyboards.py`**
 
-- [ ] Buat tombol inline per daerah
+- [x] Buat tombol inline per daerah
 - [ ] Pisahkan tombol per halaman jika terlalu banyak
-- [ ] Gunakan callback data yang aman dan singkat
+- [x] Gunakan callback data yang aman dan singkat
 - [ ] Tambahkan tombol `Batal` atau `Kembali`
 
 ## 3.5. Buat Handlers Bot
 **File: `src/bot/handlers.py`**
 
 ### Command yang harus dibuat:
-- [ ] `/start` → tampilkan welcome + pilihan daerah
-- [ ] `/help` → tampilkan panduan
-- [ ] `/cek` → ambil data harga berdasarkan daerah user
-- [ ] `/daerah` → ubah daerah pilihan user
-- [ ] `/stop` → berhenti berlangganan
+- [x] `/start` → tampilkan welcome + pilihan daerah
+- [x] `/help` → tampilkan panduan
+- [x] `/cek` → ambil data harga berdasarkan daerah user
+- [x] `/daerah` → ubah daerah pilihan user
+- [x] `/stop` → berhenti berlangganan
 
 ### Callback handler:
-- [ ] Handler untuk pilihan daerah dari inline keyboard
-- [ ] Simpan pilihan daerah ke database
-- [ ] Kirim konfirmasi setelah daerah tersimpan
+- [x] Handler untuk pilihan daerah dari inline keyboard
+- [x] Simpan pilihan daerah ke database
+- [x] Kirim konfirmasi setelah daerah tersimpan
 
 ### Error handler:
-- [ ] Tangani error global di Telegram application
-- [ ] Log semua exception penting
-- [ ] Kirim notifikasi error yang aman ke user
+- [x] Tangani error global di Telegram application
+- [x] Log semua exception penting
+- [ ] Kirim notifikasi error yang aman ke user/admin secara lebih lengkap
 
 ## 3.6. Alur User yang Harus Diuji
 ### Alur user baru:
@@ -1004,15 +1056,15 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Simpan log interaksi penting user
 
 **✅ CHECKLIST FASE 3:**
-- [ ] Database koneksi dan init selesai
-- [ ] Tabel users selesai
-- [ ] CRUD user dasar selesai
-- [ ] Inline keyboard daerah selesai
-- [ ] Handler `/start`, `/help`, `/cek`, `/daerah`, `/stop` selesai
-- [ ] Callback handler selesai
-- [ ] Error handler dasar selesai
-- [ ] Semua alur user utama berhasil diuji
-- [ ] Commit: `git add . && git commit -m "Fase 3: Bot and database integration complete"`
+- [x] Database koneksi dan init selesai
+- [x] Tabel users selesai
+- [x] CRUD user dasar selesai
+- [x] Inline keyboard daerah selesai
+- [x] Handler `/start`, `/help`, `/cek`, `/daerah`, `/stop` selesai
+- [x] Callback handler selesai
+- [x] Error handler dasar selesai
+- [ ] Semua alur user utama berhasil diuji manual di Telegram
+- [x] Commit dan push sudah dilakukan
 
 ---
 
@@ -1080,10 +1132,10 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 **Tujuan:** Memastikan bot stabil sebelum dipublikasikan
 
 ## 5.1. Unit Test
-- [ ] Test URL builder
-- [ ] Test parser HTML
-- [ ] Test dataframe cleaner
-- [ ] Test formatter pesan
+- [x] Test URL builder
+- [x] Test parser HTML
+- [x] Test dataframe cleaner lewat parser flow
+- [x] Test formatter pesan
 - [ ] Test database operations dasar
 
 ## 5.2. Integration Test
@@ -1102,11 +1154,11 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Telegram API error sementara
 
 ## 5.4. Quality Checks
-- [ ] Rapikan code format dengan Black
-- [ ] Cek linting dengan Flake8
-- [ ] Cek import dan typing minimal
-- [ ] Pastikan tidak ada secret di code
-- [ ] Pastikan tidak ada debug print tersisa
+- [x] Rapikan code format dengan Black
+- [x] Cek linting dengan Flake8
+- [x] Cek import dan typing minimal
+- [x] Pastikan tidak ada secret di code
+- [x] Pastikan tidak ada debug print tersisa
 
 ## 5.5. Ketahanan Sistem
 - [ ] Uji command berturut-turut
@@ -1115,12 +1167,12 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Uji restart scheduler
 
 **✅ CHECKLIST FASE 5:**
-- [ ] Unit test dasar tersedia
+- [x] Unit test dasar tersedia
 - [ ] Integration test utama tersedia
 - [ ] Manual test selesai
-- [ ] Code quality check selesai
-- [ ] Tidak ada bug mayor yang tersisa
-- [ ] Commit: `git add . && git commit -m "Fase 5: Testing and QA complete"`
+- [x] Code quality check selesai
+- [x] Tidak ada bug mayor yang tersisa dari diagnostics/lint/test saat ini
+- [x] Commit dan push sudah dilakukan
 
 ---
 
@@ -1142,10 +1194,10 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Ada persistent storage atau external DB
 
 ## 6.2. Persiapan Deploy
-- [ ] Pastikan `requirements.txt` final
-- [ ] Pastikan `.env.example` update
-- [ ] Pastikan `README.md` punya langkah deploy
-- [ ] Pastikan entrypoint jelas (`main.py`)
+- [x] Pastikan `requirements.txt` final untuk tahap MVP awal
+- [x] Pastikan `.env.example` update
+- [x] Pastikan `README.md` punya langkah setup dasar
+- [x] Pastikan entrypoint jelas (`main.py`)
 
 ## 6.3. Konfigurasi Environment di Server
 - [ ] Set `TELEGRAM_BOT_TOKEN`
@@ -1155,13 +1207,13 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Set `TIMEZONE`
 
 ## 6.4. Deployment Checklist
-- [ ] Upload/push code ke repository
+- [x] Upload/push code ke repository GitHub
 - [ ] Connect repository ke platform hosting
 - [ ] Set start command
 - [ ] Jalankan deploy pertama
 - [ ] Cek logs startup
 - [ ] Test bot respond `/start`
-- [ ] Test scheduler aktif
+- [ ] Test scheduler aktif setelah Fase 4 selesai
 
 ## 6.5. Setelah Deploy
 - [ ] Pantau logs 1-2 hari pertama

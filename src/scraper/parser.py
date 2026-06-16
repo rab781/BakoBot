@@ -6,12 +6,16 @@ from io import StringIO
 from typing import Any, cast
 
 import pandas as pd
+from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from src.utils.logger import logger
 
+EMPTY_VALUES = {"", "-", "nan", "none", "None"}
+
 
 def parse_html_tables(html: str) -> list[pd.DataFrame]:
-    """Parse all HTML tables from a response body."""
+    """Parse all HTML tables from a response body using pandas fallback."""
     try:
         tables = pd.read_html(StringIO(html))
     except ValueError:
@@ -37,12 +41,70 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return cleaned
 
 
+def _clean_text(value: str) -> str:
+    """Normalize whitespace from HTML text."""
+    return " ".join(value.replace("\xa0", " ").split()).strip()
+
+
 def _normalize_price(value: Any) -> str:
     """Normalize raw price value to display string."""
-    text = str(value).strip()
-    if not text or text.lower() in {"nan", "none", "-"}:
+    text = _clean_text(str(value))
+    if text.lower() in EMPTY_VALUES:
         return "-"
     return text
+
+
+def _clean_commodity_name(value: str) -> str:
+    """Remove visual indentation markers from commodity names."""
+    return _clean_text(value).lstrip("- ").strip()
+
+
+def _is_empty(value: str) -> bool:
+    """Check whether text is considered empty."""
+    return value.strip().lower() in {"", "-", "nan", "none"}
+
+
+def extract_records_with_beautifulsoup(html: str) -> list[dict[str, str]]:
+    """Extract records directly from HTML table while preserving displayed text."""
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.find("table")
+    if not isinstance(table, Tag):
+        return []
+
+    records: list[dict[str, str]] = []
+    rows = table.find_all("tr")
+
+    for row in rows:
+        if not isinstance(row, Tag):
+            continue
+        cells = row.find_all(["td", "th"])
+        if len(cells) < 5:
+            continue
+
+        values = [_clean_text(cell.get_text(" ", strip=True)) for cell in cells]
+        lowered = " ".join(values).lower()
+        if "nama bahan pokok" in lowered and "harga sekarang" in lowered:
+            continue
+
+        komoditas = _clean_commodity_name(values[1])
+        satuan = _clean_text(values[2])
+        harga = _normalize_price(values[4])
+
+        if _is_empty(komoditas) or _is_empty(satuan):
+            continue
+
+        records.append(
+            {
+                "komoditas": komoditas,
+                "satuan": satuan,
+                "harga": harga,
+            }
+        )
+
+    if records:
+        logger.info("Extracted %s record(s) using BeautifulSoup", len(records))
+
+    return records
 
 
 def dataframe_to_records(df: pd.DataFrame) -> list[dict[str, str]]:
@@ -54,20 +116,19 @@ def dataframe_to_records(df: pd.DataFrame) -> list[dict[str, str]]:
 
     for _, row in df.iterrows():
         values = [str(value).strip() for value in row.tolist()]
-        if not values or all(
-            value.lower() in {"", "nan", "none", "-"} for value in values
-        ):
+        if not values or all(value.lower() in EMPTY_VALUES for value in values):
             continue
 
         lowered = " ".join(values).lower()
         if "komoditas" in lowered and "harga" in lowered:
             continue
 
-        komoditas = values[1] if len(values) > 1 else values[0]
+        komoditas = _clean_commodity_name(values[1] if len(values) > 1 else values[0])
         satuan = values[2] if len(values) > 2 else ""
-        harga = _normalize_price(values[3] if len(values) > 3 else values[-1])
+        harga_index = 4 if len(values) > 4 else -1
+        harga = _normalize_price(values[harga_index])
 
-        if komoditas.lower() in {"nan", "none", "", "-"}:
+        if _is_empty(komoditas) or _is_empty(satuan):
             continue
 
         records.append(
@@ -82,7 +143,11 @@ def dataframe_to_records(df: pd.DataFrame) -> list[dict[str, str]]:
 
 
 def extract_records_from_html(html: str) -> list[dict[str, str]]:
-    """Extract commodity records from the first useful table in HTML."""
+    """Extract commodity records from HTML table."""
+    bs4_records = extract_records_with_beautifulsoup(html)
+    if bs4_records:
+        return bs4_records
+
     for table in parse_html_tables(html):
         cleaned = clean_dataframe(table)
         records = dataframe_to_records(cleaned)

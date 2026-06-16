@@ -20,6 +20,10 @@ SISKAPERBAPO_BASE_URL = os.getenv(
     "SISKAPERBAPO_BASE_URL",
     "https://siskaperbapo.jatimprov.go.id/harga/tabel/",
 ).strip()
+SISKAPERBAPO_TABLE_ENDPOINT = os.getenv(
+    "SISKAPERBAPO_TABLE_ENDPOINT",
+    "https://siskaperbapo.jatimprov.go.id/harga/tabel.nodesign/",
+).strip()
 SCRAPING_TIMEOUT = int(os.getenv("SCRAPING_TIMEOUT", "30"))
 SCRAPING_RETRY_ATTEMPTS = int(os.getenv("SCRAPING_RETRY_ATTEMPTS", "3"))
 

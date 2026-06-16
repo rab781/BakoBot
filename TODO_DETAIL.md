@@ -20,12 +20,13 @@
 
 ## ✅ STATUS IMPLEMENTASI TERKINI
 
-Update terakhir: fondasi MVP awal sudah selesai dibuat dan sudah dipush ke GitHub.
+Update terakhir: fondasi MVP awal sudah selesai, scraper AJAX Siskaperbapo sudah diperbaiki, dan project sudah dipush ke GitHub.
 
 ### Sudah selesai
 - [x] Struktur project Python dibuat.
 - [x] `.gitignore`, `.env.example`, `requirements.txt`, `setup.cfg`, dan `README.md` dibuat.
 - [x] Dependency diinstall dan disesuaikan untuk Python 3.13.
+- [x] Dependency `html5lib` ditambahkan untuk fallback parsing HTML.
 - [x] Config environment dibuat di `config/settings.py`.
 - [x] Constants daerah dan pesan bot dibuat di `config/constants.py`.
 - [x] Logger dengan rotating file handler dibuat.
@@ -35,12 +36,15 @@ Update terakhir: fondasi MVP awal sudah selesai dibuat dan sudah dipush ke GitHu
 - [x] Database SQLite dibuat dengan tabel `users`.
 - [x] CRUD dasar user/subscription dibuat.
 - [x] Scraper Siskaperbapo awal dibuat.
+- [x] Scraper diperbaiki agar memakai endpoint AJAX `tabel.nodesign`.
 - [x] Parser tabel HTML dibuat.
+- [x] Parser diperbaiki agar harga `15.900` tidak berubah menjadi `15.9`.
 - [x] Formatter pesan Telegram dibuat.
 - [x] Message splitting untuk pesan panjang dibuat.
 - [x] Unit test dasar dibuat untuk URL builder, parser, dan formatter.
+- [x] Unit test parser struktur tabel AJAX Siskaperbapo ditambahkan.
 - [x] `python -m compileall .` berhasil.
-- [x] `python -m pytest tests` berhasil: 5 test passed.
+- [x] `python -m pytest tests` berhasil: 6 test passed.
 - [x] `python -m black --check .` berhasil.
 - [x] `python -m flake8 .` berhasil.
 - [x] Diagnostics project bersih tanpa error/warning.
@@ -50,8 +54,10 @@ Update terakhir: fondasi MVP awal sudah selesai dibuat dan sudah dipush ke GitHu
 
 ### Belum selesai / berikutnya
 - [ ] Buat file `.env` lokal dan isi `TELEGRAM_BOT_TOKEN` asli.
-- [ ] Test manual bot langsung di Telegram.
-- [ ] Validasi scraping nyata untuk beberapa daerah di Siskaperbapo.
+- [x] Test manual awal bot langsung di Telegram: `/start`, pilih daerah, dan `/cek` berjalan sampai scraping.
+- [ ] Test manual ulang `/cek` setelah fix scraper AJAX.
+- [x] Validasi scraping nyata untuk `jemberkab` berhasil: 67 record.
+- [ ] Validasi scraping nyata untuk beberapa daerah lain di Siskaperbapo.
 - [ ] Implementasi scheduler broadcast harian dengan APScheduler.
 - [ ] Tambahkan rate limiting per user.
 - [ ] Tambahkan backup database otomatis.

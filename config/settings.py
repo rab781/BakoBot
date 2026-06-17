@@ -30,6 +30,7 @@ SCRAPING_TIMEOUT = int(os.getenv("SCRAPING_TIMEOUT", "30"))
 SCRAPING_RETRY_ATTEMPTS = int(os.getenv("SCRAPING_RETRY_ATTEMPTS", "3"))
 
 BROADCAST_TIME = os.getenv("BROADCAST_TIME", "08:00").strip()
+BROADCAST_SEND_DELAY = float(os.getenv("BROADCAST_SEND_DELAY", "0.5"))
 TIMEZONE = os.getenv("TIMEZONE", "Asia/Jakarta").strip()
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").strip().upper()

@@ -15,6 +15,8 @@ ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "").strip()
 
 DATABASE_PATH = os.getenv("DATABASE_PATH", "data/botbako.db").strip()
 DATABASE_FULL_PATH = PROJECT_ROOT / DATABASE_PATH
+BACKUP_DIR = PROJECT_ROOT / os.getenv("BACKUP_DIR", "backups").strip()
+BACKUP_KEEP_COUNT = int(os.getenv("BACKUP_KEEP_COUNT", "7"))
 
 SISKAPERBAPO_BASE_URL = os.getenv(
     "SISKAPERBAPO_BASE_URL",

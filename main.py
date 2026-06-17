@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 from src.database.operations import init_db
 from telegram import Update
 from telegram.ext import (
@@ -10,7 +13,14 @@ from telegram.ext import (
     CommandHandler,
 )
 
-from config.settings import TELEGRAM_BOT_TOKEN, validate_required_settings
+from config.settings import (
+    BROADCAST_TIME,
+    TELEGRAM_BOT_TOKEN,
+    TIMEZONE,
+    validate_required_settings,
+)
+from src.bot.broadcast import broadcast_daily_prices
+from src.database.backup import backup_database
 from src.bot.handlers import (
     cek_command,
     daerah_command,
@@ -40,6 +50,37 @@ def build_application() -> Application:
     return app
 
 
+def setup_scheduler(app: Application) -> None:
+    """Setup and start background scheduler."""
+    scheduler = AsyncIOScheduler(timezone=TIMEZONE)
+    
+    hour, minute = map(int, BROADCAST_TIME.split(":"))
+    scheduler.add_job(
+        broadcast_daily_prices,
+        "cron",
+        hour=hour,
+        minute=minute,
+        args=[app.bot],
+        id="daily_broadcast",
+        replace_existing=True,
+    )
+
+    async def run_backup():
+        await asyncio.to_thread(backup_database)
+
+    scheduler.add_job(
+        run_backup,
+        "cron",
+        hour=0,
+        minute=0,
+        id="daily_backup",
+        replace_existing=True,
+    )
+    
+    scheduler.start()
+    logger.info("Scheduler started. Broadcast at %s, Backup at 00:00", BROADCAST_TIME)
+
+
 def main() -> None:
     """Start the bot in polling mode."""
     logger.info("Initializing database...")
@@ -47,6 +88,9 @@ def main() -> None:
 
     logger.info("Starting Telegram bot...")
     app = build_application()
+    
+    setup_scheduler(app)
+    
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 

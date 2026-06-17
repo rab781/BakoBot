@@ -65,18 +65,18 @@ Bot ini bertujuan mengambil data harga komoditas dari website Siskaperbapo Jawa 
 - [ ] Tambahkan pilihan daerah dengan inline keyboard.
 - [ ] Tambahkan command `/daerah` untuk ganti daerah.
 - [ ] Tambahkan command `/stop` untuk berhenti berlangganan.
-- [ ] Tambahkan scheduler broadcast harian.
+- [x] Tambahkan scheduler broadcast harian.
 - [ ] Tambahkan retry saat scraping gagal.
 - [ ] Tambahkan logging dasar.
 - [ ] Tambahkan message splitting jika pesan terlalu panjang.
 
 ## Prioritas 3 — Bot Lebih Aman dan Stabil
-- [ ] Tambahkan error handler global.
-- [ ] Tambahkan rate limit per user.
-- [ ] Tambahkan backup database otomatis.
-- [ ] Tambahkan notifikasi error ke admin.
+- [x] Tambahkan error handler global.
+- [x] Tambahkan rate limit per user.
+- [x] Tambahkan backup database otomatis.
+- [x] Tambahkan notifikasi error ke admin.
 - [ ] Tambahkan test dasar untuk scraper, formatter, dan database.
-- [ ] Siapkan deployment 24/7.
+- [x] Siapkan deployment 24/7 (via PM2).
 
 ## Prioritas 4 — Fitur Lanjutan
 - [ ] Support banyak daerah per user.

@@ -6,6 +6,8 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from config.constants import DAERAH_LIST, MESSAGES
+from config.settings import USER_COMMAND_RATE_LIMIT, USER_COMMAND_RATE_PERIOD
+from src.bot.admin import notify_admin
 from src.bot.keyboards import build_region_keyboard
 from src.database.operations import (
     get_user_by_chat_id,
@@ -15,7 +17,11 @@ from src.database.operations import (
 from src.scraper.siskaperbapo import scrape_harga
 from src.utils.formatters import format_harga_message, split_long_message
 from src.utils.logger import logger
+from src.utils.rate_limiter import RateLimiter
 
+rate_limiter = RateLimiter(
+    max_requests=USER_COMMAND_RATE_LIMIT, period_seconds=USER_COMMAND_RATE_PERIOD
+)
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle /start command and show region selection."""
@@ -92,7 +98,11 @@ async def cek_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     chat_id = update.effective_chat.id if update.effective_chat else None
     if chat_id is None:
-        await update.message.reply_text(MESSAGES["error"])
+        await update.message.reply_text(MESSAGES.get("error_occurred", "Terjadi kesalahan"))
+        return
+
+    if rate_limiter.is_limited(str(chat_id)):
+        await update.message.reply_text(MESSAGES.get("rate_limit", "⏱️ Terlalu banyak permintaan. Mohon tunggu sebentar."))
         return
 
     user = get_user_by_chat_id(chat_id)
@@ -134,3 +144,5 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
     logger.exception(
         "Unhandled Telegram error. update=%s error=%s", update, context.error
     )
+    if context.bot:
+        await notify_admin(context.bot, f"⚠️ ERROR pada bot:\n{context.error}")

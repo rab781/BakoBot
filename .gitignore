@@ -41,6 +41,8 @@ htmlcov/
 .idea/
 *.swp
 *.swo
+to-do.md
+TODO_DETAIL.md
 
 # OS files
 .DS_Store

@@ -1,0 +1,24 @@
+[Unit]
+Description=Botbako Telegram Bot Service
+After=network.target
+
+[Service]
+# Ganti 'ubuntu' dengan username komputermu (misal: raihan)
+User=ubuntu
+
+# Sesuaikan dengan lokasi folder hasil clone di komputermu
+WorkingDirectory=/home/ubuntu/botbako
+
+# Path ke Python di dalam virtual environment
+ExecStart=/home/ubuntu/botbako/venv/bin/python main.py
+
+# Memastikan log tertulis secara real-time
+Environment=PYTHONUNBUFFERED=1
+Environment="PYTHONPATH=/home/ubuntu/botbako"
+
+# Restart otomatis jika bot crash (Zombie Mode!)
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

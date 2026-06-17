@@ -53,16 +53,16 @@ Update terakhir: fondasi MVP awal sudah selesai, scraper AJAX Siskaperbapo sudah
 - [x] Project berhasil dipush ke branch `main`.
 
 ### Belum selesai / berikutnya
-- [ ] Buat file `.env` lokal dan isi `TELEGRAM_BOT_TOKEN` asli.
+- [x ] Buat file `.env` lokal dan isi `TELEGRAM_BOT_TOKEN` asli.
 - [x] Test manual awal bot langsung di Telegram: `/start`, pilih daerah, dan `/cek` berjalan sampai scraping.
 - [ ] Test manual ulang `/cek` setelah fix scraper AJAX.
 - [x] Validasi scraping nyata untuk `jemberkab` berhasil: 67 record.
 - [ ] Validasi scraping nyata untuk beberapa daerah lain di Siskaperbapo.
-- [ ] Implementasi scheduler broadcast harian dengan APScheduler.
-- [ ] Tambahkan rate limiting per user.
-- [ ] Tambahkan backup database otomatis.
-- [ ] Tambahkan notifikasi error ke admin.
-- [ ] Siapkan deployment 24/7.
+- [x] Implementasi scheduler broadcast harian dengan APScheduler.
+- [x] Tambahkan rate limiting per user.
+- [x] Tambahkan backup database otomatis.
+- [x] Tambahkan notifikasi error ke admin.
+- [x] Siapkan deployment 24/7 (via PM2).
 
 ---
 

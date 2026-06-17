@@ -53,22 +53,22 @@ Bot ini bertujuan mengambil data harga komoditas dari website Siskaperbapo Jawa 
 ## 3. Prioritas Implementasi
 
 ## Prioritas 1 — MVP Wajib Jalan
-- [ ] Setup struktur project yang rapi.
-- [ ] Setup `.env` untuk token Telegram dan konfigurasi.
-- [ ] Buat bot dasar dengan `/start` dan `/help`.
-- [ ] Buat scraper Siskaperbapo untuk minimal satu daerah.
-- [ ] Format hasil scraping menjadi pesan Telegram.
-- [ ] Simpan user dan daerah pilihan ke SQLite.
-- [ ] Tambahkan command `/cek`.
+- [x] Setup struktur project yang rapi.
+- [x] Setup `.env` untuk token Telegram dan konfigurasi.
+- [x] Buat bot dasar dengan `/start` dan `/help`.
+- [x] Buat scraper Siskaperbapo untuk minimal satu daerah.
+- [x] Format hasil scraping menjadi pesan Telegram.
+- [x] Simpan user dan daerah pilihan ke SQLite.
+- [x] Tambahkan command `/cek`.
 
 ## Prioritas 2 — Bot Siap Dipakai Harian
-- [ ] Tambahkan pilihan daerah dengan inline keyboard.
-- [ ] Tambahkan command `/daerah` untuk ganti daerah.
-- [ ] Tambahkan command `/stop` untuk berhenti berlangganan.
+- [x] Tambahkan pilihan daerah dengan inline keyboard.
+- [x] Tambahkan command `/daerah` untuk ganti daerah.
+- [x] Tambahkan command `/stop` untuk berhenti berlangganan.
 - [x] Tambahkan scheduler broadcast harian.
-- [ ] Tambahkan retry saat scraping gagal.
-- [ ] Tambahkan logging dasar.
-- [ ] Tambahkan message splitting jika pesan terlalu panjang.
+- [x] Tambahkan retry saat scraping gagal.
+- [x] Tambahkan logging dasar.
+- [x] Tambahkan message splitting jika pesan terlalu panjang.
 
 ## Prioritas 3 — Bot Lebih Aman dan Stabil
 - [x] Tambahkan error handler global.

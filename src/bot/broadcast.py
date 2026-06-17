@@ -90,14 +90,10 @@ async def broadcast_daily_prices(bot: Bot) -> dict[str, int]:
     if total_users > 0:
         await notify_admin(
             bot,
-            "📣 Broadcast harian selesai
-"
-            f"User: {total_users}
-"
-            f"Daerah: {len(grouped_users)}
-"
-            f"Berhasil: {success_count}
-"
+            f"📣 Broadcast harian selesai\n"
+            f"User: {total_users}\n"
+            f"Daerah: {len(grouped_users)}\n"
+            f"Berhasil: {success_count}\n"
             f"Gagal: {failed_count}",
         )
 

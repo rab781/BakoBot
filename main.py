@@ -33,25 +33,8 @@ from src.bot.handlers import (
 from src.utils.logger import logger
 
 
-def build_application() -> Application:
-    """Build and configure Telegram application."""
-    validate_required_settings()
-
-    app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
-
-    app.add_handler(CommandHandler("start", start_command))
-    app.add_handler(CommandHandler("help", help_command))
-    app.add_handler(CommandHandler("cek", cek_command))
-    app.add_handler(CommandHandler("daerah", daerah_command))
-    app.add_handler(CommandHandler("stop", stop_command))
-    app.add_handler(CallbackQueryHandler(region_callback, pattern="^region:"))
-
-    app.add_error_handler(error_handler)
-    return app
-
-
-def setup_scheduler(app: Application) -> None:
-    """Setup and start background scheduler."""
+async def post_init(app: Application) -> None:
+    """Setup and start background scheduler after the bot has started."""
     scheduler = AsyncIOScheduler(timezone=TIMEZONE)
     
     hour, minute = map(int, BROADCAST_TIME.split(":"))
@@ -81,6 +64,23 @@ def setup_scheduler(app: Application) -> None:
     logger.info("Scheduler started. Broadcast at %s, Backup at 00:00", BROADCAST_TIME)
 
 
+def build_application() -> Application:
+    """Build and configure Telegram application."""
+    validate_required_settings()
+
+    app = Application.builder().token(TELEGRAM_BOT_TOKEN).post_init(post_init).build()
+
+    app.add_handler(CommandHandler("start", start_command))
+    app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("cek", cek_command))
+    app.add_handler(CommandHandler("daerah", daerah_command))
+    app.add_handler(CommandHandler("stop", stop_command))
+    app.add_handler(CallbackQueryHandler(region_callback, pattern="^region:"))
+
+    app.add_error_handler(error_handler)
+    return app
+
+
 def main() -> None:
     """Start the bot in polling mode."""
     logger.info("Initializing database...")
@@ -88,8 +88,6 @@ def main() -> None:
 
     logger.info("Starting Telegram bot...")
     app = build_application()
-    
-    setup_scheduler(app)
     
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 

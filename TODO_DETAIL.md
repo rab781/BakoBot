@@ -1122,14 +1122,14 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Pastikan broadcast tetap lanjut untuk user lain
 
 **✅ CHECKLIST FASE 4:**
-- [ ] APScheduler terpasang dan aktif
-- [ ] Fungsi broadcast selesai
-- [ ] Optimasi scraping per daerah selesai
-- [ ] Delay/rate limiting dasar selesai
-- [ ] Jadwal harian selesai
-- [ ] Backup job tambahan minimal direncanakan
-- [ ] Broadcast manual dan otomatis berhasil diuji
-- [ ] Commit: `git add . && git commit -m "Fase 4: Scheduler and broadcast complete"`
+- [x] APScheduler terpasang dan aktif
+- [x] Fungsi broadcast selesai
+- [x] Optimasi scraping per daerah selesai
+- [x] Delay/rate limiting dasar selesai
+- [x] Jadwal harian selesai
+- [x] Backup job tambahan minimal direncanakan
+- [x] Broadcast manual dan otomatis berhasil diuji
+- [x] Commit: `git add . && git commit -m "Fase 4: Scheduler and broadcast complete"`
 
 ---
 
@@ -1228,12 +1228,12 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Verifikasi data database tetap persist setelah restart
 
 **✅ CHECKLIST FASE 6:**
-- [ ] Platform deploy dipilih
-- [ ] Environment variables di server lengkap
-- [ ] Bot berhasil online 24/7
-- [ ] Scheduler jalan di server
-- [ ] Logging server terpantau
-- [ ] Commit/dokumentasi deployment selesai
+- [x] Platform deploy dipilih
+- [x] Environment variables di server lengkap
+- [x] Bot berhasil online 24/7
+- [x] Scheduler jalan di server
+- [x] Logging server terpantau
+- [x] Commit/dokumentasi deployment selesai
 
 ---
 
@@ -1273,11 +1273,11 @@ def scrape_harga(kode_daerah: str, tanggal: Optional[date] = None) -> Optional[L
 - [ ] Tambah export CSV/PDF
 
 **✅ CHECKLIST FASE 7:**
-- [ ] Monitoring dasar aktif
-- [ ] Backup berjalan
-- [ ] Alert admin tersedia
-- [ ] Prosedur recovery terdokumentasi
-- [ ] Roadmap lanjutan disusun
+- [x] Monitoring dasar aktif
+- [x] Backup berjalan
+- [x] Alert admin tersedia
+- [x] Prosedur recovery terdokumentasi
+- [x] Roadmap lanjutan disusun
 
 ---
 
@@ -1323,13 +1323,13 @@ Tambahkan ini sebelum publish luas:
 
 # DEFINISI SELESAI (Definition of Done)
 Project bisa dianggap siap dipakai jika:
-- [ ] User bisa daftar dan pilih daerah
-- [ ] User bisa cek harga manual kapan saja
-- [ ] Bot bisa kirim update otomatis harian
-- [ ] Data user tetap aman setelah bot restart
-- [ ] Error umum tidak membuat bot mati total
-- [ ] Ada log yang cukup untuk debug
-- [ ] Deploy berjalan stabil minimal beberapa hari
+- [x] User bisa daftar dan pilih daerah
+- [x] User bisa cek harga manual kapan saja
+- [x] Bot bisa kirim update otomatis harian
+- [x] Data user tetap aman setelah bot restart
+- [x] Error umum tidak membuat bot mati total
+- [x] Ada log yang cukup untuk debug
+- [x] Deploy berjalan stabil minimal beberapa hari
 
 ---
 

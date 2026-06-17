@@ -29,6 +29,7 @@ from src.bot.handlers import (
     region_callback,
     start_command,
     stop_command,
+    termurah_command,
 )
 from src.utils.logger import logger
 
@@ -73,6 +74,7 @@ def build_application() -> Application:
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("cek", cek_command))
+    app.add_handler(CommandHandler("termurah", termurah_command))
     app.add_handler(CommandHandler("daerah", daerah_command))
     app.add_handler(CommandHandler("stop", stop_command))
     app.add_handler(CallbackQueryHandler(region_callback, pattern="^region:"))

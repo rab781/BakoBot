@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
+import os
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
@@ -13,11 +16,13 @@ from src.database.operations import (
     get_user_by_chat_id,
     set_subscription_status,
     upsert_user_region,
+    get_latest_prices_for_commodity,
 )
 from src.scraper.siskaperbapo import scrape_harga
 from src.utils.formatters import format_harga_message, split_long_message
 from src.utils.logger import logger
 from src.utils.rate_limiter import RateLimiter
+from src.utils.visualizer import generate_price_chart
 
 rate_limiter = RateLimiter(
     max_requests=USER_COMMAND_RATE_LIMIT, period_seconds=USER_COMMAND_RATE_PERIOD
@@ -125,6 +130,61 @@ async def cek_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     for chunk in split_long_message(message):
         await update.message.reply_text(chunk)
+
+
+async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle /termurah command."""
+    if not update.message or not update.effective_user:
+        return
+
+    user_id = update.effective_user.id
+    if not rate_limiter.acquire(user_id):
+        await update.message.reply_text(MESSAGES["rate_limit"])
+        return
+
+    if not context.args:
+        await update.message.reply_text(
+            "❌ *Format salah.*\n\n"
+            "Gunakan: `/termurah <nama_komoditas>`\n"
+            "Contoh: `/termurah beras premium`",
+            parse_mode="Markdown"
+        )
+        return
+
+    komoditas = " ".join(context.args).lower()
+    loading_msg = await update.message.reply_text("⏳ Sedang mencari harga lintas daerah dan menggambar grafik...")
+
+    try:
+        data = await asyncio.to_thread(get_latest_prices_for_commodity, komoditas)
+        
+        if not data:
+            await loading_msg.edit_text(
+                f"❌ Data untuk komoditas *{komoditas.upper()}* tidak ditemukan.\n"
+                "Pastikan ejaannya benar (contoh: beras premium, cabai rawit).",
+                parse_mode="Markdown"
+            )
+            return
+            
+        chart_path = await asyncio.to_thread(generate_price_chart, komoditas, data)
+        
+        if not chart_path or not os.path.exists(chart_path):
+            await loading_msg.edit_text("❌ Terjadi kesalahan saat me-render grafik.")
+            return
+            
+        # Send photo
+        with open(chart_path, "rb") as photo:
+            await update.message.reply_photo(
+                photo=photo,
+                caption=f"📊 Peta Harga Lintas Daerah: *{komoditas.upper()}*\n\n"
+                        f"Menampilkan {len(data)} daerah.",
+                parse_mode="Markdown"
+            )
+            
+        await loading_msg.delete()
+        
+    except Exception as e:
+        logger.error("Error in termurah_command: %s", e)
+        await loading_msg.edit_text(MESSAGES["error_occurred"])
 
 
 async def stop_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

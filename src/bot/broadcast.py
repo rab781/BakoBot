@@ -13,7 +13,11 @@ from telegram.error import BadRequest, Forbidden, TelegramError
 from config.constants import DAERAH_LIST
 from config.settings import BROADCAST_SEND_DELAY
 from src.bot.admin import notify_admin
-from src.database.operations import get_all_subscribed_users, set_subscription_status
+from src.database.operations import (
+    get_all_subscribed_users,
+    set_subscription_status,
+    save_price_history,
+)
 from src.scraper.siskaperbapo import scrape_harga
 from src.utils.formatters import format_harga_message, split_long_message
 from src.utils.logger import logger
@@ -69,6 +73,25 @@ async def broadcast_daily_prices(bot: Bot) -> dict[str, int]:
 
     for kode_daerah, region_users in grouped_users.items():
         records = await asyncio.to_thread(scrape_harga, kode_daerah, today)
+        
+        # Simpan ke histori harga untuk fitur /termurah
+        if records:
+            tanggal_str = today.strftime("%Y-%m-%d")
+            for r in records:
+                try:
+                    harga_raw = str(r.get("harga", "0")).replace(".", "").replace(",", "").strip()
+                    harga_int = int(harga_raw) if harga_raw.isdigit() else 0
+                    if harga_int > 0:
+                        await asyncio.to_thread(
+                            save_price_history,
+                            tanggal_str,
+                            kode_daerah,
+                            r.get("komoditas", ""),
+                            harga_int
+                        )
+                except Exception as e:
+                    logger.error("Gagal menyimpan histori harga: %s", e)
+                    
         message = format_harga_message(kode_daerah, records, today)
 
         for user in region_users:

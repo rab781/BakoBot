@@ -2,14 +2,6 @@
 
 Bot Telegram untuk mengambil dan mengirimkan informasi harga komoditas dari Siskaperbapo Jawa Timur berdasarkan daerah pilihan pengguna.
 
-## Status
-
-Project sedang dalam tahap fondasi awal. Roadmap tersedia di:
-
-- `to-do.md`
-- `TODO_DETAIL.md`
-- `ANALISIS_MASALAH.md`
-
 ## Setup Lokal
 
 1. Buat virtual environment.
@@ -25,7 +17,3 @@ Project sedang dalam tahap fondasi awal. Roadmap tersedia di:
 - `/cek` untuk cek harga saat ini.
 - `/daerah` untuk mengganti daerah.
 - `/stop` untuk berhenti berlangganan.
-
-## Catatan Keamanan
-
-Jangan commit file `.env` karena berisi token Telegram dan konfigurasi sensitif.

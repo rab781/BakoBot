@@ -38,7 +38,7 @@ async def post_init(app: Application) -> None:
     """Setup and start background scheduler after the bot has started."""
     scheduler = AsyncIOScheduler(timezone=TIMEZONE)
     
-    hour, minute = map(int, BROADCAST_TIME.split(":"))
+    hour, minute = BROADCAST_TIME.split(":")
     scheduler.add_job(
         broadcast_daily_prices,
         "cron",

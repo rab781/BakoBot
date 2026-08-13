@@ -73,13 +73,18 @@ async def broadcast_daily_prices(bot: Bot) -> dict[str, int]:
 
     for kode_daerah, region_users in grouped_users.items():
         records = await asyncio.to_thread(scrape_harga, kode_daerah, today)
-        
+
         # Simpan ke histori harga untuk fitur /termurah
         if records:
             tanggal_str = today.strftime("%Y-%m-%d")
             for r in records:
                 try:
-                    harga_raw = str(r.get("harga", "0")).replace(".", "").replace(",", "").strip()
+                    harga_raw = (
+                        str(r.get("harga", "0"))
+                        .replace(".", "")
+                        .replace(",", "")
+                        .strip()
+                    )
                     harga_int = int(harga_raw) if harga_raw.isdigit() else 0
                     if harga_int > 0:
                         await asyncio.to_thread(
@@ -87,11 +92,11 @@ async def broadcast_daily_prices(bot: Bot) -> dict[str, int]:
                             tanggal_str,
                             kode_daerah,
                             r.get("komoditas", ""),
-                            harga_int
+                            harga_int,
                         )
                 except Exception as e:
                     logger.error("Gagal menyimpan histori harga: %s", e)
-                    
+
         message = format_harga_message(kode_daerah, records, today)
 
         for user in region_users:

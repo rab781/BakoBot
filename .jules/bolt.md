@@ -1,0 +1,3 @@
+## 2023-11-20 - Database Insertion Optimization
+**Learning:** SQLite database inserts can become a bottleneck when inserting many rows (like scraped price history records) using single `execute` statements in a loop. In this codebase, the price history recording was iterating through all parsed price records for a region and executing a single insert query per record, establishing separate connection instances and generating many round-trips.
+**Action:** Always favor `executemany` for batch inserts into the database. Modifying `broadcast_daily_prices` to aggregate records and execute a single batch insert per region significantly improved database performance and reduced connection overhead.

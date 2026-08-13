@@ -144,6 +144,18 @@ def save_price_history(tanggal: str, kode_daerah: str, komoditas: str, harga_int
         )
 
 
+def save_price_histories(records: list[tuple[str, str, str, int]]) -> None:
+    """Save multiple scraped prices to history in a single batch."""
+    with get_connection() as conn:
+        conn.executemany(
+            """
+            INSERT INTO price_history (tanggal, kode_daerah, komoditas, harga_int)
+            VALUES (?, ?, ?, ?)
+            """,
+            records,
+        )
+
+
 def get_latest_prices_for_commodity(komoditas: str) -> list[dict[str, Any]]:
     """Get the latest prices for a specific commodity across all regions."""
     with get_connection() as conn:

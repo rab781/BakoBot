@@ -42,7 +42,7 @@ def init_db() -> None:
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_users_kode_daerah ON users(kode_daerah)"
         )
-        
+
         # Tabel histori harga
         conn.execute(
             """
@@ -132,7 +132,9 @@ def get_all_subscribed_users() -> list[dict[str, Any]]:
     return [dict(row) for row in rows]
 
 
-def save_price_history(tanggal: str, kode_daerah: str, komoditas: str, harga_int: int) -> None:
+def save_price_history(
+    tanggal: str, kode_daerah: str, komoditas: str, harga_int: int
+) -> None:
     """Save scraped price to history."""
     with get_connection() as conn:
         conn.execute(
@@ -150,13 +152,13 @@ def get_latest_prices_for_commodity(komoditas: str) -> list[dict[str, Any]]:
         # Cari tanggal terbaru untuk komoditas ini
         row = conn.execute(
             "SELECT MAX(tanggal) as max_date FROM price_history WHERE komoditas LIKE ?",
-            (f"%{komoditas}%",)
+            (f"%{komoditas}%",),
         ).fetchone()
-        
+
         max_date = row["max_date"] if row else None
         if not max_date:
             return []
-            
+
         rows = conn.execute(
             """
             SELECT kode_daerah, komoditas, harga_int 
@@ -164,7 +166,7 @@ def get_latest_prices_for_commodity(komoditas: str) -> list[dict[str, Any]]:
             WHERE komoditas LIKE ? AND tanggal = ?
             ORDER BY harga_int ASC
             """,
-            (f"%{komoditas}%", max_date)
+            (f"%{komoditas}%", max_date),
         ).fetchall()
-        
+
     return [dict(row) for row in rows]

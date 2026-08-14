@@ -1,0 +1,3 @@
+## 2025-02-13 - [ChatActions and CallbackQuery Notifications in Telegram bots]
+**Learning:** For Telegram bots, using `ChatAction.TYPING` and `ChatAction.UPLOAD_PHOTO` provides excellent built-in user feedback for long-running processes (like scraping or image generation) without needing to manage extra message edits. Additionally, supplying a text string to `query.answer()` shows a native toast notification, giving immediate feedback for inline button clicks.
+**Action:** When adding long-running commands or interactive elements to Telegram bots, proactively include `ChatAction` and `query.answer(text="...")` to enhance user feedback natively.

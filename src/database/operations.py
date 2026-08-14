@@ -23,8 +23,7 @@ def get_connection() -> sqlite3.Connection:
 def init_db() -> None:
     """Initialize database tables."""
     with get_connection() as conn:
-        conn.execute(
-            """
+        conn.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 chat_id INTEGER PRIMARY KEY,
                 username TEXT,
@@ -34,8 +33,7 @@ def init_db() -> None:
                 created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL
             )
-            """
-        )
+            """)
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_users_subscribed ON users(is_subscribed)"
         )
@@ -44,8 +42,7 @@ def init_db() -> None:
         )
 
         # Tabel histori harga
-        conn.execute(
-            """
+        conn.execute("""
             CREATE TABLE IF NOT EXISTS price_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 tanggal TEXT NOT NULL,
@@ -53,8 +50,7 @@ def init_db() -> None:
                 komoditas TEXT NOT NULL,
                 harga_int INTEGER NOT NULL
             )
-            """
-        )
+            """)
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_price_history_tanggal_komoditas ON price_history(tanggal, komoditas)"
         )
@@ -121,14 +117,12 @@ def set_subscription_status(chat_id: int, is_subscribed: bool) -> None:
 def get_all_subscribed_users() -> list[dict[str, Any]]:
     """Get all users subscribed to daily broadcast."""
     with get_connection() as conn:
-        rows = conn.execute(
-            """
+        rows = conn.execute("""
             SELECT * FROM users
             WHERE is_subscribed = 1
               AND kode_daerah IS NOT NULL
               AND kode_daerah != ''
-            """
-        ).fetchall()
+            """).fetchall()
     return [dict(row) for row in rows]
 
 
@@ -143,6 +137,20 @@ def save_price_history(
             VALUES (?, ?, ?, ?)
             """,
             (tanggal, kode_daerah, komoditas, harga_int),
+        )
+
+
+def save_price_history_batch(records: list[tuple[str, str, str, int]]) -> None:
+    """Save multiple scraped prices to history in a single transaction."""
+    if not records:
+        return
+    with get_connection() as conn:
+        conn.executemany(
+            """
+            INSERT INTO price_history (tanggal, kode_daerah, komoditas, harga_int)
+            VALUES (?, ?, ?, ?)
+            """,
+            records,
         )
 
 

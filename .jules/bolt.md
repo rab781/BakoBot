@@ -1,0 +1,3 @@
+## 2024-05-24 - N+1 Query in Broadcast loop
+**Learning:** The daily broadcast script looped through commodities and opened a new SQLite database transaction for every single record to save it into the history table (`await asyncio.to_thread(save_price_history, ...)`). This is very expensive and creates huge overhead.
+**Action:** When handling arrays/lists of entities to be saved to DB, use batch inserts like `executemany` instead of iterating and inserting one by one.

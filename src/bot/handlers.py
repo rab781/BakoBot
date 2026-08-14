@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import re
 
 from telegram import Update
 from telegram.ext import ContextTypes
@@ -145,8 +146,12 @@ async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return
 
     user_id = update.effective_user.id
-    if not rate_limiter.acquire(user_id):
-        await update.message.reply_text(MESSAGES["rate_limit"])
+    if rate_limiter.is_limited(str(user_id)):
+        await update.message.reply_text(
+            MESSAGES.get(
+                "rate_limit", "⏱️ Terlalu banyak permintaan. Mohon tunggu sebentar."
+            )
+        )
         return
 
     if not context.args:
@@ -158,7 +163,18 @@ async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         )
         return
 
-    komoditas = " ".join(context.args).lower()
+    raw_komoditas = " ".join(context.args).lower()
+    # Validate and sanitize input
+    komoditas = re.sub(r"[^a-z0-9 ]", "", raw_komoditas).strip()
+
+    if not komoditas or len(komoditas) > 50:
+        await update.message.reply_text(
+            "❌ *Input tidak valid.*\n\n"
+            "Nama komoditas terlalu panjang atau mengandung karakter tidak valid.",
+            parse_mode="Markdown",
+        )
+        return
+
     loading_msg = await update.message.reply_text(
         "⏳ Sedang mencari harga lintas daerah dan menggambar grafik..."
     )

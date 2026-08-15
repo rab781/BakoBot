@@ -145,8 +145,12 @@ async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return
 
     user_id = update.effective_user.id
-    if not rate_limiter.acquire(user_id):
-        await update.message.reply_text(MESSAGES["rate_limit"])
+    if rate_limiter.is_limited(str(user_id)):
+        await update.message.reply_text(
+            MESSAGES.get(
+                "rate_limit", "⏱️ Terlalu banyak permintaan. Mohon tunggu sebentar."
+            )
+        )
         return
 
     if not context.args:
@@ -159,6 +163,12 @@ async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return
 
     komoditas = " ".join(context.args).lower()
+    if len(komoditas) > 50:
+        await update.message.reply_text(
+            "❌ *Nama komoditas terlalu panjang (maksimal 50 karakter).*"
+        )
+        return
+
     loading_msg = await update.message.reply_text(
         "⏳ Sedang mencari harga lintas daerah dan menggambar grafik..."
     )

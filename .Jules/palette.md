@@ -1,0 +1,3 @@
+## 2025-02-14 - Telegram Bot Menu Discovery
+**Learning:** Telegram bots often lack obvious discovery of commands for end-users, requiring them to memorize or lookup commands via `/help`. We can use `set_my_commands` API to register commands so they appear in autocomplete and the bot menu, a highly impactful micro-UX improvement for conversational interfaces.
+**Action:** When working on Telegram bots, always ensure the bot commands are registered with Telegram API (`set_my_commands`) so users have discoverability and a graphical menu.

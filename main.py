@@ -6,7 +6,7 @@ import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from src.database.operations import init_db
-from telegram import Update
+from telegram import BotCommand, Update
 from telegram.ext import (
     Application,
     CallbackQueryHandler,
@@ -36,8 +36,19 @@ from src.utils.logger import logger
 
 async def post_init(app: Application) -> None:
     """Setup and start background scheduler after the bot has started."""
+    # Set bot commands for autocomplete and menu
+    commands = [
+        BotCommand("start", "Mulai menggunakan bot"),
+        BotCommand("help", "Tampilkan bantuan"),
+        BotCommand("cek", "Cek harga komoditas saat ini"),
+        BotCommand("termurah", "Cari harga termurah (misal: /termurah beras)"),
+        BotCommand("daerah", "Pilih atau ganti daerah"),
+        BotCommand("stop", "Berhenti menerima update otomatis"),
+    ]
+    await app.bot.set_my_commands(commands)
+
     scheduler = AsyncIOScheduler(timezone=TIMEZONE)
-    
+
     hour, minute = BROADCAST_TIME.split(":")
     scheduler.add_job(
         broadcast_daily_prices,
@@ -60,7 +71,7 @@ async def post_init(app: Application) -> None:
         id="daily_backup",
         replace_existing=True,
     )
-    
+
     scheduler.start()
     logger.info("Scheduler started. Broadcast at %s, Backup at 00:00", BROADCAST_TIME)
 
@@ -90,7 +101,7 @@ def main() -> None:
 
     logger.info("Starting Telegram bot...")
     app = build_application()
-    
+
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 

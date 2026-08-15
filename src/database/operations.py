@@ -56,7 +56,8 @@ def init_db() -> None:
             """
         )
         conn.execute(
-            "CREATE INDEX IF NOT EXISTS idx_price_history_tanggal_komoditas ON price_history(tanggal, komoditas)"
+            "CREATE INDEX IF NOT EXISTS idx_price_history_tanggal_komoditas "
+            "ON price_history(tanggal, komoditas)"
         )
     logger.info("Database initialized at %s", DATABASE_FULL_PATH)
 
@@ -146,6 +147,18 @@ def save_price_history(
         )
 
 
+def save_price_history_batch(records: list[tuple[str, str, str, int]]) -> None:
+    """Save multiple scraped prices to history in a batch."""
+    with get_connection() as conn:
+        conn.executemany(
+            """
+            INSERT INTO price_history (tanggal, kode_daerah, komoditas, harga_int)
+            VALUES (?, ?, ?, ?)
+            """,
+            records,
+        )
+
+
 def get_latest_prices_for_commodity(komoditas: str) -> list[dict[str, Any]]:
     """Get the latest prices for a specific commodity across all regions."""
     with get_connection() as conn:
@@ -161,8 +174,8 @@ def get_latest_prices_for_commodity(komoditas: str) -> list[dict[str, Any]]:
 
         rows = conn.execute(
             """
-            SELECT kode_daerah, komoditas, harga_int 
-            FROM price_history 
+            SELECT kode_daerah, komoditas, harga_int
+            FROM price_history
             WHERE komoditas LIKE ? AND tanggal = ?
             ORDER BY harga_int ASC
             """,

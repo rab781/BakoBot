@@ -1,19 +1,17 @@
 """Data visualization module for price arbitrage."""
 
-import os
 import re
-from pathlib import Path
 from typing import Any
 
 import matplotlib
 
 matplotlib.use("Agg")  # Use non-interactive backend
-import matplotlib.pyplot as plt
-import seaborn as sns
+import matplotlib.pyplot as plt  # noqa: E402
+import seaborn as sns  # noqa: E402
 
-from config.settings import PROJECT_ROOT
-from config.constants import DAERAH_LIST
-from src.utils.logger import logger
+from config.settings import PROJECT_ROOT  # noqa: E402
+from config.constants import DAERAH_LIST  # noqa: E402
+from src.utils.logger import logger  # noqa: E402
 
 
 def generate_price_chart(komoditas: str, data: list[dict[str, Any]]) -> str | None:
@@ -35,9 +33,9 @@ def generate_price_chart(komoditas: str, data: list[dict[str, Any]]) -> str | No
         regions = []
         prices = []
 
-        # Sort data highest to lowest so the cheapest is at the bottom (or top) of horizontal bar
+        # Sort data highest to lowest so the cheapest is at the bottom
         # In matplotlib barh, the first item is at the bottom.
-        # We want cheapest at the top, so we sort lowest to highest, then matplotlib plots bottom-up.
+        # We want cheapest at the top, so we sort highest to lowest
         data_sorted = sorted(data, key=lambda x: x["harga_int"], reverse=True)
 
         for item in data_sorted:

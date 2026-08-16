@@ -6,6 +6,7 @@ import asyncio
 import os
 
 from telegram import Update
+from telegram.constants import ChatAction
 from telegram.ext import ContextTypes
 
 from config.constants import DAERAH_LIST, MESSAGES
@@ -125,7 +126,11 @@ async def cek_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         return
 
     kode_daerah = str(user["kode_daerah"])
+
     loading_message = await update.message.reply_text(MESSAGES["loading"])
+
+    # Show typing action while scraping
+    await context.bot.send_chat_action(chat_id=chat_id, action=ChatAction.TYPING)
 
     records = scrape_harga(kode_daerah)
     message = format_harga_message(kode_daerah, records)
@@ -171,6 +176,11 @@ async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
     loading_msg = await update.message.reply_text(
         "⏳ Sedang mencari harga lintas daerah dan menggambar grafik..."
+    )
+
+    # Show photo upload action while finding prices and generating chart
+    await context.bot.send_chat_action(
+        chat_id=update.effective_chat.id, action=ChatAction.UPLOAD_PHOTO
     )
 
     try:

@@ -161,11 +161,18 @@ def save_price_history_batch(records: list[tuple[str, str, str, int]]) -> None:
 
 def get_latest_prices_for_commodity(komoditas: str) -> list[dict[str, Any]]:
     """Get the latest prices for a specific commodity across all regions."""
+    # Sanitize wildcards to prevent malicious matching
+    sanitized_komoditas = (
+        komoditas.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    )
+
     with get_connection() as conn:
         # Cari tanggal terbaru untuk komoditas ini
         row = conn.execute(
-            "SELECT MAX(tanggal) as max_date FROM price_history WHERE komoditas LIKE ?",
-            (f"%{komoditas}%",),
+            "SELECT MAX(tanggal) as max_date "
+            "FROM price_history "
+            "WHERE komoditas LIKE ? ESCAPE '\\'",
+            (f"%{sanitized_komoditas}%",),
         ).fetchone()
 
         max_date = row["max_date"] if row else None
@@ -176,10 +183,10 @@ def get_latest_prices_for_commodity(komoditas: str) -> list[dict[str, Any]]:
             """
             SELECT kode_daerah, komoditas, harga_int
             FROM price_history
-            WHERE komoditas LIKE ? AND tanggal = ?
+            WHERE komoditas LIKE ? ESCAPE '\\' AND tanggal = ?
             ORDER BY harga_int ASC
             """,
-            (f"%{komoditas}%", max_date),
+            (f"%{sanitized_komoditas}%", max_date),
         ).fetchall()
 
     return [dict(row) for row in rows]

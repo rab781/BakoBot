@@ -53,10 +53,9 @@ MESSAGES = {
         "/start - Mulai menggunakan bot\n"
         "/help - Tampilkan bantuan\n"
         "/cek - Cek harga komoditas saat ini\n"
+        "/termurah - Cari harga termurah lintas daerah (misal: /termurah beras)\n"
         "/daerah - Pilih atau ganti daerah\n"
-        "/stop - Berhenti menerima update otomatis\n\n"
-        "Catatan: fitur /cek, /daerah, dan /stop akan aktif setelah "
-        "integrasi database dan scraper selesai."
+        "/stop - Berhenti menerima update otomatis"
     ),
     "loading": "⏳ Mengambil data harga komoditas...",
     "not_implemented": "🚧 Fitur ini sedang disiapkan dan akan segera tersedia.",

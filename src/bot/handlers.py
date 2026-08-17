@@ -8,6 +8,7 @@ import os
 from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import ContextTypes
+from telegram.helpers import escape_markdown
 
 from config.constants import DAERAH_LIST, MESSAGES
 from config.settings import USER_COMMAND_RATE_LIMIT, USER_COMMAND_RATE_PERIOD
@@ -186,9 +187,11 @@ async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     try:
         data = await asyncio.to_thread(get_latest_prices_for_commodity, komoditas)
 
+        safe_komoditas = escape_markdown(komoditas.upper(), version=1)
+
         if not data:
             await loading_msg.edit_text(
-                f"❌ Data untuk komoditas *{komoditas.upper()}* tidak ditemukan.\n"
+                f"❌ Data untuk komoditas *{safe_komoditas}* tidak ditemukan.\n"
                 "Pastikan ejaannya benar (contoh: beras premium, cabai rawit).",
                 parse_mode="Markdown",
             )
@@ -204,7 +207,7 @@ async def termurah_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         with open(chart_path, "rb") as photo:
             await update.message.reply_photo(
                 photo=photo,
-                caption=f"📊 Peta Harga Lintas Daerah: *{komoditas.upper()}*\n\n"
+                caption=f"📊 Peta Harga Lintas Daerah: *{safe_komoditas}*\n\n"
                 f"Menampilkan {len(data)} daerah.",
                 parse_mode="Markdown",
             )

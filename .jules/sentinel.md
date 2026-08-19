@@ -10,3 +10,7 @@
 **Vulnerability:** The `get_latest_prices_for_commodity` function executed SQL `LIKE` queries using unsanitized user input (`komoditas`). While parameterized queries protected against traditional SQL injection, failing to escape `%` and `_` allowed wildcard injection, potentially leading to unintended record matching or DoS via expensive full-table scans.
 **Learning:** SQLite `LIKE` clauses using parameters (e.g., `?`) still evaluate wildcard characters within the parameter string unless explicitly escaped and declared via the `ESCAPE` keyword.
 **Prevention:** Always sanitize strings used in `LIKE` queries by escaping `%` and `_` characters (and the escape character itself), and append `ESCAPE '\'` to the SQL query clause.
+## 2024-10-28 - [Markdown Injection in Handlers]
+**Vulnerability:** Unsanitized user input (`komoditas`) was used directly in messages sent with `parse_mode="Markdown"`.
+**Learning:** Telegram API throws exceptions if markdown characters in user input are not properly closed, leading to failed requests and missing responses. It can also be exploited to change text formatting maliciously.
+**Prevention:** Always sanitize user input using `telegram.helpers.escape_markdown(text, version=1)` before sending it in Markdown mode.

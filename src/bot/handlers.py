@@ -121,7 +121,8 @@ async def cek_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     user = get_user_by_chat_id(chat_id)
     if not user or not user.get("kode_daerah"):
         await update.message.reply_text(
-            "❌ Anda belum memilih daerah. Gunakan /start atau /daerah terlebih dahulu."
+            "❌ Anda belum memilih daerah. Silakan pilih daerah Anda:",
+            reply_markup=build_region_keyboard(),
         )
         return
 

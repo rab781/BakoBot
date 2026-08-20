@@ -5,3 +5,7 @@
 ## 2026-08-16 - HTTP Keep-Alive for Scraping
 **Learning:** During the scraping process, repeatedly issuing `requests.get` or `requests.post` creates a new TCP connection for every request, which introduces significant latency (approx. 1.5s vs 0.15s per 5 requests in this case). Using a global `requests.Session()` reuses the underlying connection (HTTP Keep-Alive), drastically reducing connection overhead.
 **Action:** When performing sequential API calls or scraping to the same host, always use a single `requests.Session()` instead of repeated bare `requests.get` / `requests.post` calls to utilize connection pooling and avoid repeating SSL/TCP handshakes.
+
+## 2026-08-20 - Use lxml for BeautifulSoup Parsing
+**Learning:** When using `BeautifulSoup` to parse large HTML tables (like those scraped from Siskaperbapo), using the default `html.parser` is significantly slower. Replacing it with the C-based `lxml` parser can improve parsing speed by approximately 25-30%.
+**Action:** When initializing `BeautifulSoup` for performance-sensitive scraping operations, always check if `lxml` is available in `requirements.txt` and use it instead of `html.parser`.

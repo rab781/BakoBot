@@ -66,7 +66,10 @@ def _is_empty(value: str) -> bool:
 
 def extract_records_with_beautifulsoup(html: str) -> list[dict[str, str]]:
     """Extract records directly from HTML table while preserving displayed text."""
-    soup = BeautifulSoup(html, "html.parser")
+    # ⚡ Bolt Optimization: Use lxml parser instead of html.parser.
+    # lxml is a C-based parser that provides significant speedups for HTML parsing,
+    # which is especially beneficial for large tables.
+    soup = BeautifulSoup(html, "lxml")
     table = soup.find("table")
     if not isinstance(table, Tag):
         return []

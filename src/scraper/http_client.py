@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import requests
+import certifi
 from tenacity import (
     retry,
     retry_if_exception_type,
@@ -23,6 +24,7 @@ class ScrapingError(Exception):
 # Measurement: Reduces sequential request time by ~10x
 # (e.g., from 1.5s to 0.15s per 5 requests).
 _session = requests.Session()
+_session.verify = certifi.where()
 _session.headers.update(
     {
         "User-Agent": (

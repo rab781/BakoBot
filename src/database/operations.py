@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -69,7 +69,7 @@ def upsert_user_region(
     full_name: str | None = None,
 ) -> None:
     """Create or update user region preference."""
-    now = datetime.utcnow().isoformat()
+    now = datetime.now(timezone.utc).isoformat()
     with get_connection() as conn:
         conn.execute(
             """
@@ -106,7 +106,7 @@ def get_user_by_chat_id(chat_id: int) -> dict[str, Any] | None:
 
 def set_subscription_status(chat_id: int, is_subscribed: bool) -> None:
     """Update subscription status for a user."""
-    now = datetime.utcnow().isoformat()
+    now = datetime.now(timezone.utc).isoformat()
     with get_connection() as conn:
         conn.execute(
             "UPDATE users SET is_subscribed = ?, updated_at = ? WHERE chat_id = ?",
